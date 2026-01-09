@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى حوراء - تصميم رومانسي</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;600&display=swap');
+
+        :root {
+            --primary: #4a0e4e; /* Deep Purple */
+            --secondary: #81185b; /* Magenta */
+            --accent: #ffd700; /* Gold */
+            --text-light: #fff0f5;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            background: linear-gradient(135deg, #1a0b2e 0%, #4a0e4e 50%, #81185b 100%);
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-light);
+            position: relative;
+        }
+
+        /* Animated Background Stars/Particles */
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: twinkle infinite ease-in-out;
+        }
+
+        /* Glassmorphism Card */
+        .card {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 30px;
+            padding: 40px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            opacity: 0;
+            animation: fadeInCard 1.5s ease-out forwards;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Aref Ruqaa', serif;
+            font-size: 3.5rem;
+            margin: 0;
+            background: linear-gradient(to bottom, #ffd700, #ffecb3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            animation: pulseName 3s infinite ease-in-out;
+        }
+
+        .subtitle {
+            font-family: 'Amiri', serif;
+            font-size: 1.4rem;
+            margin-top: 10px;
+            color: #e0e0e0;
+            font-style: italic;
+        }
+
+        .poetry-box {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-right: 4px solid var(--accent);
+            border-left: 4px solid var(--accent);
+        }
+
+        .poetry-line {
+            font-family: 'Amiri', serif;
+            font-size: 1.3rem;
+            line-height: 2.2;
+            margin: 10px 0;
+            display: block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideUp 1s ease-out forwards;
+        }
+
+        .poetry-line:nth-child(1) { animation-delay: 1s; }
+        .poetry-line:nth-child(2) { animation-delay: 2s; }
+        .poetry-line:nth-child(3) { animation-delay: 3s; }
+
+        /* Heart Animation */
+        .heart-btn {
+            background: linear-gradient(45deg, #ff3366, #ba265d);
+            border: none;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px auto 0;
+            transition: transform 0.3s;
+            animation: beat 1.2s infinite;
+        }
+
+        .heart-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .heart-icon {
+            font-size: 30px;
+            color: white;
+        }
+
+        /* Modal Overlay for Message */
+        .message-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+
+        .message-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .hidden-message {
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        .hidden-message h2 {
+            font-family: 'Aref Ruqaa', serif;
+            color: var(--accent);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            margin-top: 30px;
+            padding: 10px 30px;
+            border: 1px solid white;
+            background: transparent;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Cairo', sans-serif;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Animations Keyframes */
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        @keyframes beat {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 20px 20px rgba(255, 51, 102, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+        }
+
+        @keyframes fadeInCard {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes slideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulseName {
+            0%, 100% { text-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); }
+            50% { text-shadow: 0 4px 25px rgba(255, 215, 0, 0.8); }
+        }
+
+        /* Floating Hearts Container */
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .float-heart {
+            position: absolute;
+            bottom: -50px;
+            font-size: 20px;
+            color: rgba(255, 192, 203, 0.6);
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="stars" id="starsContainer"></div>
+    <div class="floating-hearts" id="heartsContainer"></div>
+
+    <div class="card">
+        <h1>حوراء</h1>
+        <div class="subtitle">أميرةُ الجمالِ وسيدةُ القلوب</div>
+
+        <div class="poetry-box">
+            <span class="poetry-line">يا حوراء، في عينيكِ سحرُ الليلِ وضياءُ القمر</span>
+            <span class="poetry-line">سبحان من سوّاكِ آيةً في الحسنِ تأسرُ النظر</span>
+            <span class="poetry-line">أنتِ القصيدةُ التي عجزَ عن وصفها الوتر</span>
+        </div>
+
+        <button class="heart-btn" onclick="showMessage()">
+            <span class="heart-icon">❤</span>
+        </button>
+        <p style="font-size: 0.8rem; margin-top: 15px; opacity: 0.7;">اضغطي على القلب</p>
+    </div>
+
+    <!-- Hidden Message Overlay -->
+    <div class="message-overlay" id="overlay">
+        <div class="hidden-message">
+            <h2>إليكِ يا حوراء</h2>
+            <p style="font-size: 1.2rem; line-height: 1.8; max-width: 80%; margin: 0 auto;">
+                كل تفاصيلكِ جميلة،<br>
+                من بريق عينيكِ الذي يشبه النجوم،<br>
+                إلى رقة قلبكِ الذي يشبه الغيم.<br>
+                وجودكِ يجعل العالم مكاناً أجمل.<br><br>
+                <span style="color: #ffd700;">أنتِ استثنائية.</span>
+                <br><br>
+                <span style="font-size: 1rem; opacity: 0.9; font-family: 'Aref Ruqaa', serif;">من إعداد: قيس الجازي</span>
+            </p>
+            <button class="close-btn" onclick="closeMessage()">عودة</button>
+        </div>
+    </div>
+
+    <script>
+        // Create Background Stars
+        const starsContainer = document.getElementById('starsContainer');
+        for(let i=0; i<50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            const xy = Math.random() * 100;
+            const duration = Math.random() * 3 + 2;
+            const size = Math.random() * 3;
+            
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDuration = `${duration}s`;
+            
+            starsContainer.appendChild(star);
+        }
+
+        // Create Floating Hearts
+        const heartsContainer = document.getElementById('heartsContainer');
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'float-heart';
+            heart.innerHTML = '❤';
+            heart.style.left = `${Math.random() * 100}%`;
+            heart.style.fontSize = `${Math.random() * 20 + 10}px`;
+            heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
+            heartsContainer.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 10000);
+        }
+
+        setInterval(createHeart, 500);
+
+        // Interaction Functions
+        function showMessage() {
+            document.getElementById('overlay').classList.add('active');
+            // Add extra burst of hearts
+            for(let i=0; i<20; i++) createHeart();
+        }
+
+        function closeMessage() {
+            document.getElementById('overlay').classList.remove('active');
+        }
+    </script>
+</body>
+</html>
